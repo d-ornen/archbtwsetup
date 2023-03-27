@@ -3,31 +3,33 @@
   tasks:
     - name: install all requred packages
       community.general.pacman:
-        - sudo
-        - ansible
-        - docker
-        - kitty
-        - keepassxc
-        - udiskie
-        - lynx
-        - firefox
-        - wofi
-        - openssh
-        - ttf-fira-code
-        - nerd-fonts
-        - waybar
-        - zsh
-        - otf-font-awesome
-        - pavucontrol
-        - pipewire
-        - grimshot
-        - xbacklight
-        - qt5
-        - wl-clipboard
-        - ntfs-3g
-        - nnn
-        - yadm
-        - android-tools
+        update_cache: true
+        - name:
+          - sudo
+          - ansible
+          - docker
+          - kitty
+          - keepassxc
+          - udiskie
+          - lynx
+          - firefox
+          - wofi
+          - openssh
+          - ttf-fira-code
+          - nerd-fonts
+          - waybar
+          - zsh
+          - otf-font-awesome
+          - pavucontrol
+          - pipewire
+          - grim
+          - acpilight
+          - qt5
+          - wl-clipboard
+          - ntfs-3g
+          - nnn
+          - yadm
+          - android-tools
     - name: enable pipewire services
       ansible.builtin.service:
         name: wireplumber
