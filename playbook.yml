@@ -1,0 +1,52 @@
+- hosts: localhost
+  become: true
+  tasks:
+    - name: install all requred packages
+      community.general.pacman:
+        - sudo
+        - kitty
+        - keepassxc
+        - udiskie
+        - lynx
+        - firefox
+        - wofi
+        - openssh
+        - ttf-fira-code
+        - nerd-fonts
+        - waybar
+        - zsh
+        - otf-font-awesome
+        - pavucontrol
+        - pipewire
+        - grimshot
+        - xbacklight
+        - qt5
+        - wl-clipboard
+        - ntfs-3g
+        - nnn
+        - yadm
+        - android-tools
+    - name: enable pipewire services
+      ansible.builtin.service:
+        name: wireplumber
+        state: started
+        enabled: true
+    - name: enable pipewire.socket
+      shell: systemctl --user enable --now pipewire.socket
+    - name: add video group
+      ansible.builtin.group:
+        name: video
+        state: present
+    - name: add "jus" user to video group
+      ansible.builtin.user:
+        name: jus
+        group: video
+        append: true
+    - name: install oh-my-zsh
+      shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    - name: copy dotfiles
+      shell: yadm clone https://github.com/d-ornen/dotfiles
+    - name: install packer for neovim
+      shell: git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim
+        # manually: run nvim +PackerSync; yadm status (and resolve conficts);copy required ssh keys to ~/Documents/ssh; 
+        # TODO: compile paru
