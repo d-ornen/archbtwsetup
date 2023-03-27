@@ -4,6 +4,8 @@
     - name: install all requred packages
       community.general.pacman:
         - sudo
+        - ansible
+        - docker
         - kitty
         - keepassxc
         - udiskie
@@ -37,10 +39,10 @@
       ansible.builtin.group:
         name: video
         state: present
-    - name: add "jus" user to video group
+    - name: add "jus" user to video,docker groups
       ansible.builtin.user:
         name: jus
-        group: video
+        groups: video,docker
         append: true
     - name: install oh-my-zsh
       shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
