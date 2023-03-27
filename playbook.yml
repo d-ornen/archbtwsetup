@@ -4,19 +4,24 @@
     - name: install all requred packages
       community.general.pacman:
         update_cache: true
-        - name:
+        extra_args:
+        name:
           - sudo
           - ansible
+          - neovim
           - docker
+          - pipewire-jack
           - kitty
+          - wireplumber
           - keepassxc
+          - gnu-free-fonts
           - udiskie
           - lynx
           - firefox
           - wofi
           - openssh
           - ttf-fira-code
-          - nerd-fonts
+            #- nerd-fonts
           - waybar
           - zsh
           - otf-font-awesome
@@ -30,27 +35,35 @@
           - nnn
           - yadm
           - android-tools
-    - name: enable pipewire services
-      ansible.builtin.service:
-        name: wireplumber
-        state: started
-        enabled: true
-    - name: enable pipewire.socket
-      shell: systemctl --user enable --now pipewire.socket
-    - name: add video group
+    - name: create groups
       ansible.builtin.group:
-        name: video
+        name: "{{ item }}"
         state: present
-    - name: add "jus" user to video,docker groups
+      loop:
+        - video
+        - docker
+        - sudo
+    - name: create jus user
       ansible.builtin.user:
         name: jus
-        groups: video,docker
+        shell: /bin/bash
+        groups: video,docker,sudo
         append: true
+    - name: enable pipewire services
+        ansible.builtin.service:
+          name: wireplumber
+          state: started
+          enabled: true
+    - name: enable pipewire.socket
+      shell: systemctl --user enable --now pipewire.socket
     - name: install oh-my-zsh
+      become_user: jus
       shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
     - name: copy dotfiles
+      become_user: jus
       shell: yadm clone https://github.com/d-ornen/dotfiles
     - name: install packer for neovim
+      become_user: jus
       shell: git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim
         # manually: run nvim +PackerSync; yadm status (and resolve conficts);copy required ssh keys to ~/Documents/ssh; 
         # TODO: compile paru
