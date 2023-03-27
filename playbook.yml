@@ -7,6 +7,7 @@
         extra_args:
         name:
           - sudo
+          - gammastep
           - ansible
           - neovim
           - docker
@@ -36,6 +37,9 @@
           - nnn
           - yadm
           - android-tools
+          - dex
+          - mako
+          - swaylock
     - name: create groups
       ansible.builtin.group:
         name: "{{ item }}"
@@ -67,4 +71,4 @@
       become_user: jus
       shell: git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim
         # manually: run nvim +PackerSync; yadm status (and resolve conficts);copy required ssh keys to ~/Documents/ssh; 
-        # TODO: compile paru
+        # TODO: compile paru, nwg wrapper, nm-applet
